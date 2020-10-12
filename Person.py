@@ -1,5 +1,4 @@
 class Person:
-    def __init__(self, name, start_time, end_time):
-        self.name = name
+    def __init__(self, start_time, end_time):
         self.start_time = start_time
         self.end_time = end_time

@@ -1,3 +1,4 @@
+import json
 from Person import Person
 import datetime
 from datetime import timedelta
@@ -15,6 +16,11 @@ class Schedule:
         self.sorted_person_time = sorted(self.array, key=self.person_start)
 
     def read_file(self, file):
+        with open(file) as employee_schedule:
+            schedule = json.load(employee_schedule)
+
+        obj_employee = None
+        for employee in
         return []
 
     # Getter for the person start time
@@ -43,8 +49,8 @@ def main():
     p4 = Person('reuella', datetime.time(10, 30, 0), datetime.time(18, 30, 0))
 
     array = [p3, p2, p1, p4, p5]  # Puts people into array
-    schedule = Schedule(file=employee.json)
-    schedule.calculate_breaks()
+    schedule = '/Users/laurennelson/PersonalProjects/EmployeeScheduler/employee.json'
+    Schedule.read_file(schedule)
     schedule.print_in_order()
 
 

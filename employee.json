@@ -1,0 +1,6 @@
+{
+  "lauren": {
+    "start_time": "Time(Time.parse(10:0:0))",
+    "end_time": "Time(Time.parse(10:0:0))"
+  }
+}
