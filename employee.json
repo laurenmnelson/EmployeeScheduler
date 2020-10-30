@@ -1,6 +1,14 @@
 {
   "lauren": {
-    "start_time": "Time(Time.parse(10:0:0))",
-    "end_time": "Time(Time.parse(10:0:0))"
+    "start_hr": 10,
+    "start_min": 0,
+    "end_hr": 13,
+    "end_min": 0
+  },
+  "chase": {
+    "start_hr": 0,
+    "start_min": 0,
+    "end_hr": 23,
+    "end_min": 59
   }
 }

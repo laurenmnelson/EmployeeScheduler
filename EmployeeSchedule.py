@@ -1,57 +1,68 @@
 import json
-from Person import Person
+from Employee import Employee
 import datetime
 from datetime import timedelta
-
-
-# Using Person class to create people
-# Each Person has name, start time, end time
-# Doesn't matter if these are in order because they will be sorted later
+import pprint
 
 
 class Schedule:
-    def __init__(self, file):
-        # Sorts people based on start time
-        self.array = self.read_file(file)
-        self.sorted_person_time = sorted(self.array, key=self.person_start)
+    def __init__(self):
+        self.schedule = Schedule
 
-    def read_file(self, file):
+    @staticmethod
+    def read_file():
+        file = '/Users/laurennelson/PersonalProjects/EmployeeScheduler/employee.json'
+        array = []
         with open(file) as employee_schedule:
             schedule = json.load(employee_schedule)
 
-        obj_employee = None
-        for employee in
-        return []
+        for employee in schedule:
+            name = employee
+            start_hr = schedule[employee]['start_hr']
+            start_min = schedule[employee]['start_min']
+            end_hr = schedule[employee]['end_hr']
+            end_min = schedule[employee]['end_min']
 
-    # Getter for the person start time
-    def person_start(self, person):
-        return person.start_time
+            start_time = datetime.time(hour=start_hr, minute=start_min, second=0, microsecond=0)
+            end_time = datetime.time(hour=end_hr, minute=end_min, second=0, microsecond=0)
+            new_employee = Employee(name, start_time, end_time)
+            array.append(new_employee)
 
-    def calculate_breaks(self):
-        for x in range(len(self.sorted_person_time)):
-            start = self.sorted_person_time[x].start_time
-            end = self.sorted_person_time[x].end_time
-            # duration = datetime.combine(datetime.min, end) - datetime.combine(datetime.min, start)
+        array.sort()
+
+        # for employee in array:
+        #     print(employee)
+
+        return array
+
+    def calculate_breaks(self, array):
+        for x in array:
+            start = x.start_time
+            end = x.end_time
+            time_start = datetime.datetime.combine(datetime.date.today(), start)
+            time_end = datetime.datetime.combine(datetime.date.today(), end)
+            # Get the difference between datetimes (as timedelta)
+            date_time_difference = time_end - time_start
+            # Divide difference in seconds by number of seconds in hour (3600)
+            date_time_difference_in_hours = date_time_difference.total_seconds() / 3600
+
+            if date_time_difference_in_hours >= 6:
+                first_break = time_start
+                print(first_break)
+
+        return
 
     # Prints out the people in order
-    def print_in_order(self):
-        for x in range(len(self.sorted_person_time)):
-            print(self.sorted_person_time[x].name,
-                  self.sorted_person_time[x].start_time.strftime("%I:%M%p").lstrip("0").lower(),
-                  self.sorted_person_time[x].end_time.strftime("%I:%M%p").lstrip("0").lower())
+    def print_in_order(self, unsorted_array):
+        for x in range(len(unsorted_array)):
+            print(unsorted_array[x].start_time.strftime("%I:%M%p").lstrip("0").lower(),
+                  unsorted_array[x].end_time.strftime("%I:%M%p").lstrip("0").lower())
 
 
 def main():
-    p3 = Person('lauren', datetime.time(10, 0, 0), datetime.time(16, 30, 0))
-    p5 = Person('steven', datetime.time(11, 0, 0), datetime.time(19, 30, 0))
-    p2 = Person('robby', datetime.time(9, 30, 0), datetime.time(18, 0, 0))
-    p1 = Person('tomas', datetime.time(9, 0, 0), datetime.time(17, 30, 0))
-    p4 = Person('reuella', datetime.time(10, 30, 0), datetime.time(18, 30, 0))
-
-    array = [p3, p2, p1, p4, p5]  # Puts people into array
-    schedule = '/Users/laurennelson/PersonalProjects/EmployeeScheduler/employee.json'
-    Schedule.read_file(schedule)
-    schedule.print_in_order()
+    my_schedule = Schedule()
+    sorted_array = my_schedule.read_file()
+    calculated_breaks = my_schedule.calculate_breaks(sorted_array)
 
 
 if __name__ == "__main__":
