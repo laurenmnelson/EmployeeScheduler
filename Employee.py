@@ -1,7 +1,10 @@
 class Employee:
-    def __init__(self, name, start_time, end_time):
+    def __init__(self, name, start_time, end_time, first_break, second_break, lunch):
         self.name = name
         self.start_time = start_time
+        self.first_break = first_break
+        self.second_break = second_break
+        self.lunch = lunch
         self.end_time = end_time
 
     def __eq__(self, other):
