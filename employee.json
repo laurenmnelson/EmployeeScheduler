@@ -5,10 +5,16 @@
     "end_hr": 13,
     "end_min": 0
   },
-  "chase": {
-    "start_hr": 0,
+  "steven": {
+    "start_hr": 10,
     "start_min": 0,
-    "end_hr": 23,
-    "end_min": 59
+    "end_hr": 13,
+    "end_min": 0
+  },
+  "chase": {
+    "start_hr": 9,
+    "start_min": 0,
+    "end_hr": 17,
+    "end_min": 0
   }
 }
