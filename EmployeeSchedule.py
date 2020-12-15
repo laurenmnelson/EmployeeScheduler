@@ -2,13 +2,14 @@ import json
 from Employee import Employee
 import datetime
 from datetime import timedelta
-import pprint
 
 
 class Schedule:
     def __init__(self):
         self.schedule = Schedule
 
+    # Get employees from json file
+    # Sort by start time
     @staticmethod
     def read_file():
         file = '/Users/laurennelson/PersonalProjects/EmployeeScheduler/employee.json'
@@ -30,13 +31,15 @@ class Schedule:
 
         array.sort()
 
-        # for employee in array:
-        #     print(employee)
-
         return array
 
+    # Figure out how many breaks an employee should have
+    # Calculate what time the break should be at
     def calculate_breaks(self, array):
+        count = 0
+
         for x in array:
+            count += 1
             start = x.start_time
             end = x.end_time
             time_start = datetime.datetime.combine(datetime.date.today(), start)
@@ -47,27 +50,55 @@ class Schedule:
             date_time_difference_in_hours = date_time_difference.total_seconds() / 3600
 
             if date_time_difference_in_hours >= 6:
-                x.first_break = time_start + timedelta(hours=2)
-                x.lunch = x.first_break + timedelta(hours=2)
-                x.second_break = x.lunch + timedelta(hours=2)
+                # Make sure no breaks or lunches overlap
+                if count != 1:
+                    if x.start_time == prev_start:  # overlap
+                        x.first_break = time_start + timedelta(hours=2, minutes=15)
+                        x.lunch = x.first_break + timedelta(hours=2, minutes=15)
+                        x.second_break = x.lunch + timedelta(hours=2)
+                    else:
+                        self.reg_breaks(x, time_start)
+                else:
+                    self.reg_breaks(x, time_start)
             else:
-                x.first_break = time_start + timedelta(hours=2)
-                x.lunch = datetime.time(hour=0, minute=0, second=0, microsecond=0)
-                x.second_break = datetime.time(hour=0, minute=0, second=0, microsecond=0)
+                if count != 1:
+                    if x.start_time == prev_start:  # overlap
+                        x.first_break = time_start + timedelta(hours=2, minutes=15)
+                        x.lunch = datetime.time(hour=0, minute=0, second=0, microsecond=0)
+                        x.second_break = datetime.time(hour=0, minute=0, second=0, microsecond=0)
+                    else:
+                        x.first_break = time_start + timedelta(hours=2)
+                        x.lunch = datetime.time(hour=0, minute=0, second=0, microsecond=0)
+                        x.second_break = datetime.time(hour=0, minute=0, second=0, microsecond=0)
+
+                else:
+                    x.first_break = time_start + timedelta(hours=2)
+                    x.lunch = datetime.time(hour=0, minute=0, second=0, microsecond=0)
+                    x.second_break = datetime.time(hour=0, minute=0, second=0, microsecond=0)
+
+            prev_start = x.start_time
+
+        return
+
+    @staticmethod
+    def reg_breaks(x, time_start):
+        x.first_break = time_start + timedelta(hours=2)
+        x.lunch = x.first_break + timedelta(hours=2)
+        x.second_break = x.lunch + timedelta(hours=2)
         return
 
     # Prints out the people in order
     def print_in_order(self, array_sorted):
         for x in range(len(array_sorted)):
-            if array_sorted[x].lunch != datetime.time(hour=0, minute=0, second=0, microsecond=0):
+            if array_sorted[x].lunch == datetime.time(hour=0, minute=0, second=0, microsecond=0): # no lunch
+                print(array_sorted[x].name, array_sorted[x].start_time.strftime("%I:%M%p").lstrip("0").lower(),
+                      array_sorted[x].first_break.strftime("%I:%M%p").lstrip("0").lower(),
+                      array_sorted[x].end_time.strftime("%I:%M%p").lstrip("0").lower())
+            else:
                 print(array_sorted[x].name, array_sorted[x].start_time.strftime("%I:%M%p").lstrip("0").lower(),
                       array_sorted[x].first_break.strftime("%I:%M%p").lstrip("0").lower(),
                       array_sorted[x].lunch.strftime("%I:%M%p").lstrip("0").lower(),
                       array_sorted[x].second_break.strftime("%I:%M%p").lstrip("0").lower(),
-                      array_sorted[x].end_time.strftime("%I:%M%p").lstrip("0").lower())
-            else:  # no lunch
-                print(array_sorted[x].name, array_sorted[x].start_time.strftime("%I:%M%p").lstrip("0").lower(),
-                      array_sorted[x].first_break.strftime("%I:%M%p").lstrip("0").lower(),
                       array_sorted[x].end_time.strftime("%I:%M%p").lstrip("0").lower())
 
 
