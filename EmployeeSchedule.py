@@ -51,7 +51,7 @@ class Schedule:
 
             if date_time_difference_in_hours >= 6:
                 # Make sure no breaks or lunches overlap
-                if count != 1:
+                if count != 1:  # not on first employee
                     if x.start_time == prev_start:  # overlap
                         x.first_break = time_start + timedelta(hours=2, minutes=15)
                         x.lunch = x.first_break + timedelta(hours=2, minutes=15)
@@ -61,7 +61,7 @@ class Schedule:
                 else:
                     self.reg_breaks(x, time_start)
             else:
-                if count != 1:
+                if count != 1:  # not on first employee
                     if x.start_time == prev_start:  # overlap
                         x.first_break = time_start + timedelta(hours=2, minutes=15)
                         x.lunch = datetime.time(hour=0, minute=0, second=0, microsecond=0)
@@ -80,6 +80,7 @@ class Schedule:
 
         return
 
+    # calculates the breaks for a full day and no overlap
     @staticmethod
     def reg_breaks(x, time_start):
         x.first_break = time_start + timedelta(hours=2)
@@ -88,9 +89,10 @@ class Schedule:
         return
 
     # Prints out the people in order
-    def print_in_order(self, array_sorted):
+    @staticmethod
+    def print_in_order(array_sorted):
         for x in range(len(array_sorted)):
-            if array_sorted[x].lunch == datetime.time(hour=0, minute=0, second=0, microsecond=0): # no lunch
+            if array_sorted[x].lunch == datetime.time(hour=0, minute=0, second=0, microsecond=0):  # no lunch
                 print(array_sorted[x].name, array_sorted[x].start_time.strftime("%I:%M%p").lstrip("0").lower(),
                       array_sorted[x].first_break.strftime("%I:%M%p").lstrip("0").lower(),
                       array_sorted[x].end_time.strftime("%I:%M%p").lstrip("0").lower())
