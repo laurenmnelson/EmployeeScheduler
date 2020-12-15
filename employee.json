@@ -17,6 +17,12 @@
     "end_hr": 9,
     "end_min": 0
   },
+    "greg": {
+    "start_hr": 5,
+    "start_min": 0,
+    "end_hr": 9,
+    "end_min": 0
+  },
   "chase": {
     "start_hr": 9,
     "start_min": 0,

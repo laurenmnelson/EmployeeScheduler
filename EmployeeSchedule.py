@@ -67,14 +67,10 @@ class Schedule:
                         x.lunch = datetime.time(hour=0, minute=0, second=0, microsecond=0)
                         x.second_break = datetime.time(hour=0, minute=0, second=0, microsecond=0)
                     else:
-                        x.first_break = time_start + timedelta(hours=2)
-                        x.lunch = datetime.time(hour=0, minute=0, second=0, microsecond=0)
-                        x.second_break = datetime.time(hour=0, minute=0, second=0, microsecond=0)
+                        self.short_breaks(x, time_start)
 
                 else:
-                    x.first_break = time_start + timedelta(hours=2)
-                    x.lunch = datetime.time(hour=0, minute=0, second=0, microsecond=0)
-                    x.second_break = datetime.time(hour=0, minute=0, second=0, microsecond=0)
+                    self.short_breaks(x, time_start)
 
             prev_start = x.start_time
 
@@ -86,6 +82,14 @@ class Schedule:
         x.first_break = time_start + timedelta(hours=2)
         x.lunch = x.first_break + timedelta(hours=2)
         x.second_break = x.lunch + timedelta(hours=2)
+        return
+
+    # calculates the breaks for a partial day and no overlap
+    @staticmethod
+    def short_breaks(x, time_start):
+        x.first_break = time_start + timedelta(hours=2)
+        x.lunch = datetime.time(hour=0, minute=0, second=0, microsecond=0)
+        x.second_break = datetime.time(hour=0, minute=0, second=0, microsecond=0)
         return
 
     # Prints out the people in order
