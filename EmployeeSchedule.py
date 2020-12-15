@@ -2,6 +2,7 @@ import json
 from Employee import Employee
 import datetime
 from datetime import timedelta
+from xlwt import Workbook
 
 
 class Schedule:
@@ -92,27 +93,46 @@ class Schedule:
         x.second_break = datetime.time(hour=0, minute=0, second=0, microsecond=0)
         return
 
-    # Prints out the people in order
+
+    # Creqte an excel spreadsheet with the schedule
     @staticmethod
-    def print_in_order(array_sorted):
+    def make_excel_sheet(array_sorted):
+        # Heading
+        wb = Workbook()
+        sheet1 = wb.add_sheet('Sheet 1')
+        row = 0
+        sheet1.write(row, 1, 'Start')
+        sheet1.write(row, 2, 'Break 1')
+        sheet1.write(row, 3, 'Lunch')
+        sheet1.write(row, 4, 'Break 2')
+        sheet1.write(row, 5, 'End')
+        row += 1
+
+        # Actual Info
         for x in range(len(array_sorted)):
             if array_sorted[x].lunch == datetime.time(hour=0, minute=0, second=0, microsecond=0):  # no lunch
-                print(array_sorted[x].name, array_sorted[x].start_time.strftime("%I:%M%p").lstrip("0").lower(),
-                      array_sorted[x].first_break.strftime("%I:%M%p").lstrip("0").lower(),
-                      array_sorted[x].end_time.strftime("%I:%M%p").lstrip("0").lower())
+                sheet1.write(row, 0, array_sorted[x].name)
+                sheet1.write(row, 1, array_sorted[x].start_time.strftime("%I:%M%p").lstrip("0").lower())
+                sheet1.write(row, 2, array_sorted[x].first_break.strftime("%I:%M%p").lstrip("0").lower())
+                sheet1.write(row, 5, array_sorted[x].end_time.strftime("%I:%M%p").lstrip("0").lower())
+                row += 1
             else:
-                print(array_sorted[x].name, array_sorted[x].start_time.strftime("%I:%M%p").lstrip("0").lower(),
-                      array_sorted[x].first_break.strftime("%I:%M%p").lstrip("0").lower(),
-                      array_sorted[x].lunch.strftime("%I:%M%p").lstrip("0").lower(),
-                      array_sorted[x].second_break.strftime("%I:%M%p").lstrip("0").lower(),
-                      array_sorted[x].end_time.strftime("%I:%M%p").lstrip("0").lower())
+                sheet1.write(row, 0, array_sorted[x].name)
+                sheet1.write(row, 1, array_sorted[x].start_time.strftime("%I:%M%p").lstrip("0").lower())
+                sheet1.write(row, 2, array_sorted[x].first_break.strftime("%I:%M%p").lstrip("0").lower())
+                sheet1.write(row, 3, array_sorted[x].lunch.strftime("%I:%M%p").lstrip("0").lower())
+                sheet1.write(row, 4, array_sorted[x].second_break.strftime("%I:%M%p").lstrip("0").lower())
+                sheet1.write(row, 5, array_sorted[x].end_time.strftime("%I:%M%p").lstrip("0").lower())
+                row += 1
+
+        wb.save("schedule.xls")
 
 
 def main():
     my_schedule = Schedule()
     sorted_array = my_schedule.read_file()
     my_schedule.calculate_breaks(sorted_array)
-    my_schedule.print_in_order(sorted_array)
+    my_schedule.make_excel_sheet(sorted_array)
 
 
 if __name__ == "__main__":
